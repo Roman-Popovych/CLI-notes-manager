@@ -71,9 +71,8 @@ int main(int argc, char* argv[]) {
 
 
 	if (command == "add") {
-		// add
 		if (argc < 3) {
-			std::cerr << "Usage: notes add \"text\"\n";
+			std::cerr << "Usage: notes add <text>\n";
 			return 1;
 		}
 
@@ -88,13 +87,18 @@ int main(int argc, char* argv[]) {
 		std::tm local{};
 		localtime_s(&local, &t);
 
-
 		std::fstream file(filename, std::ios::app);
-		file << (notes.size() + 1) << '|' << std::put_time(&local, "%d-%m-%Y") << '|' << text << std::endl;
 
+		int nextId = notes.empty() ? 1 : notes.back().id + 1;
 
+		file << nextId << '|'
+			<< std::put_time(&local, "%d-%m-%Y") << '|'
+			<< text << '\n';
+
+		std::cout << "Added note: " << text << std::endl;
 		return 0;
 	}
+
 	else if (command == "list") {
 		// list
 		std::cout << "Listing notes..." << std::endl;
@@ -115,11 +119,19 @@ int main(int argc, char* argv[]) {
 		try {
 			int id = std::stoi(argv[2]);
 			std::cout << "Removing note with id " << id << "\n";
+		
+			for (int i = 0; i < notes.size(); ++i) {
+				if (id == notes[i].id) {
+
+				}
+			}
+
 		}
 		catch (...) {
 			std::cerr << "Invalid id (must be a number)\n";
 			return 1;
 		}
+
 	}
 	else {
 		std::cout << "Unknown command." << std::endl;
