@@ -55,6 +55,22 @@ std::vector<Note> loadNotes(const std::string& filename)
 	return notes;
 }
 
+void updateNotes(std::vector<Note>& notes, const std::string& filename)  
+{  
+   auto now = std::chrono::system_clock::now();  
+   std::time_t t = std::chrono::system_clock::to_time_t(now);  
+   std::tm local{};  
+   localtime_s(&local, &t);  
+
+   std::ofstream file(filename, std::ios::trunc);
+
+   for (const auto& note : notes) {  
+       file << note.id << '|'  
+            << note.date << '|'  
+            << note.text << '\n';  
+   }  
+}
+
 int main(int argc, char* argv[]) {
 	if (argc < 2)
 	{
@@ -122,7 +138,15 @@ int main(int argc, char* argv[]) {
 		
 			for (int i = 0; i < notes.size(); ++i) {
 				if (id == notes[i].id) {
+					notes.erase(notes.begin() + i);
+					for (int j = i; j < notes.size(); ++j)
+					{
+						notes[j].id--;
+					}
+					std::fstream file(filename);
+					if (!file) { std::cerr << "error opening file"; }
 
+					updateNotes(notes, filename);
 				}
 			}
 
