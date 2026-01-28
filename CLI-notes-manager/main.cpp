@@ -157,6 +157,22 @@ int main(int argc, char* argv[]) {
 		}
 
 	}
+	else if (command == "clear") {
+		//clear
+		std::cout << "Clearing all notes...\n";
+		std::ofstream file(filename, std::ios::trunc);
+		return 0;
+	}
+	else if (command == "help") {
+		// help
+		std::cout << "Notes Application Help:\n"
+			<< "Commands:\n"
+			<< "  add <text>    - Add a new note with the specified text.\n"
+			<< "  list          - List all notes.\n"
+			<< "  remove <id>   - Remove the note with the specified id.\n"
+			<< "  help          - Show this help message.\n";
+		return 0;
+	}
 	else {
 		std::cout << "Unknown command." << std::endl;
 		return 1;
